@@ -1,3 +1,5 @@
+import { Manga } from "../models.ts/manga"
+
 class MangaRepository {
   private db: D1Database
 
@@ -13,6 +15,17 @@ class MangaRepository {
   async getMangaById(id: number) {
     const result = await this.db.prepare('SELECT * FROM mangas WHERE id = ?').bind(id)
     return result
+  }
+
+  async createManga(manga: Manga) {
+    const {
+      title,
+      description,
+      chapters,
+    } = manga
+
+    const query = await this.db.prepare('INSERT INTO mangas (title, description, chapters) VALUES (?, ?, ?)').bind(title, description, chapters).run()
+    return query.success
   }
 }
 
