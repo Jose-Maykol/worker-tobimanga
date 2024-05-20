@@ -1,6 +1,6 @@
 -- Create the users table
 CREATE TABLE users (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     username TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
@@ -10,17 +10,22 @@ CREATE TABLE users (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX users_email_index ON users(email);
+CREATE UNIQUE INDEX users_username_index ON users(username);
+
 -- Create the genres table
 CREATE TABLE genres (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX genres_name_index ON genres(name);
+
 -- Create the mangas table
 CREATE TABLE mangas (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
     author TEXT,
     description TEXT NOT NULL,
@@ -33,16 +38,18 @@ CREATE TABLE mangas (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX mangas_title_index ON mangas(title);
+
 -- Create the manga_genres table
 CREATE TABLE manga_genres (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     manga_id TEXT NOT NULL REFERENCES mangas(id),
     genre_id TEXT NOT NULL REFERENCES genres(id)
 );
 
 -- Create the chapters table
 CREATE TABLE chapters (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     manga_id TEXT NOT NULL REFERENCES mangas(id),
     chapter_number INTEGER NOT NULL,
     release_date DATE,
@@ -50,9 +57,11 @@ CREATE TABLE chapters (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX chapters_manga_id_chapter_number_index ON chapters(manga_id, chapter_number);
+
 -- Create the user_mangas table
 CREATE TABLE user_mangas (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL REFERENCES users(id),
     manga_id TEXT NOT NULL REFERENCES mangas(id),
     rating INTEGER,
@@ -62,9 +71,11 @@ CREATE TABLE user_mangas (
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE UNIQUE INDEX user_mangas_user_id_manga_id_index ON user_mangas(user_id, manga_id);
+
 -- Create the user_read_chapters table
 CREATE TABLE user_read_chapters (
-    id TEXT PRIMARY KEY,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL REFERENCES users(id),
     chapter_id TEXT NOT NULL REFERENCES chapters(id),
     read BOOLEAN NOT NULL DEFAULT FALSE,
@@ -72,3 +83,5 @@ CREATE TABLE user_read_chapters (
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE UNIQUE INDEX user_read_chapters_user_id_chapter_id_index ON user_read_chapters(user_id, chapter_id);
