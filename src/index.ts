@@ -12,7 +12,13 @@
  */
 
 import { Hono } from 'hono'
-const app = new Hono()
+import { Bindings } from 'hono/types'
+import mangas from './routes/manga.routes'
+
+const app = new Hono<{ Bindings: Bindings }>()
+
+// Manga routes
+app.route('/mangas', mangas)
 
 app.get('/', (c) => c.text('API Tobimanga'))
 
