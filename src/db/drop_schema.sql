@@ -1,3 +1,5 @@
+-- npx wrangler d1 execute tobimanga --local --file=src/db/drop_schema.sql
+
 -- Drop the user_read_chapters table
 DROP TABLE IF EXISTS user_read_chapters;
 

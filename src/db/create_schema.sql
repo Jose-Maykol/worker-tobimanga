@@ -1,3 +1,5 @@
+-- npx wrangler d1 execute tobimanga --local --file=src/db/create_schema.sql
+
 -- Create the users table
 CREATE TABLE users (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -27,7 +29,6 @@ CREATE UNIQUE INDEX genres_name_index ON genres(name);
 CREATE TABLE mangas (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL UNIQUE,
-    author TEXT,
     description TEXT NOT NULL,
     chapters INTEGER NOT NULL,
     release_year INTEGER,
@@ -43,14 +44,14 @@ CREATE UNIQUE INDEX mangas_title_index ON mangas(title);
 -- Create the manga_genres table
 CREATE TABLE manga_genres (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    manga_id TEXT NOT NULL REFERENCES mangas(id),
-    genre_id TEXT NOT NULL REFERENCES genres(id)
+    manga_id INTEGER NOT NULL REFERENCES mangas(id),
+    genre_id INTEGER NOT NULL REFERENCES genres(id)
 );
 
 -- Create the chapters table
 CREATE TABLE chapters (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    manga_id TEXT NOT NULL REFERENCES mangas(id),
+    manga_id INTEGER NOT NULL REFERENCES mangas(id),
     chapter_number INTEGER NOT NULL,
     release_date DATE,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -62,8 +63,8 @@ CREATE UNIQUE INDEX chapters_manga_id_chapter_number_index ON chapters(manga_id,
 -- Create the user_mangas table
 CREATE TABLE user_mangas (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL REFERENCES users(id),
-    manga_id TEXT NOT NULL REFERENCES mangas(id),
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    manga_id INTEGER NOT NULL REFERENCES mangas(id),
     rating INTEGER,
     favorite BOOLEAN NOT NULL DEFAULT FALSE,
     dropped BOOLEAN NOT NULL DEFAULT FALSE,
@@ -76,8 +77,8 @@ CREATE UNIQUE INDEX user_mangas_user_id_manga_id_index ON user_mangas(user_id, m
 -- Create the user_read_chapters table
 CREATE TABLE user_read_chapters (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    user_id TEXT NOT NULL REFERENCES users(id),
-    chapter_id TEXT NOT NULL REFERENCES chapters(id),
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    chapter_id INTEGER NOT NULL REFERENCES chapters(id),
     read BOOLEAN NOT NULL DEFAULT FALSE,
     read_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
