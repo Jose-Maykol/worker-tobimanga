@@ -18,11 +18,27 @@ export const getAllMangas = async (c: Context) => {
   })
 }
 
+export const getMangaById = async (c: Context) => {
+  const mangaRepository = new MangaRepository(c.env.DB)
+  const mangaId: number = parseInt(c.req.param('id'))
+  const manga = await mangaRepository.getMangaById(mangaId)
+
+  if (!manga) {
+    c.status(404)
+    return c.json({
+      message: 'Manga no encontrado'
+    })
+  }
+
+  c.status(200)
+  return c.json({
+    manga
+  })
+}
+
 export const createManga = async (c: Context) => {
   const mangaRepository = new MangaRepository(c.env.DB)
   const manga = await c.req.json()
-
-  console.log(manga)
 
   const created = await mangaRepository.createManga(manga)
 
