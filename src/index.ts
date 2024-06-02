@@ -14,8 +14,12 @@
 import { Hono } from 'hono'
 import { Bindings } from 'hono/types'
 import mangas from './routes/manga.routes'
+import auth from './routes/auth.routes'
 
 const app = new Hono<{ Bindings: Bindings }>()
+
+// Auth routes
+app.route('/auth', auth)
 
 // Manga routes
 app.route('/mangas', mangas)
