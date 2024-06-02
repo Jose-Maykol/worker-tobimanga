@@ -15,6 +15,7 @@ import { Hono } from 'hono'
 import { Bindings } from 'hono/types'
 import mangas from './routes/manga.routes'
 import auth from './routes/auth.routes'
+import user from './routes/user.routes'
 
 const app = new Hono<{ Bindings: Bindings }>()
 
@@ -23,6 +24,9 @@ app.route('/auth', auth)
 
 // Manga routes
 app.route('/mangas', mangas)
+
+// User routes
+app.route('/user', user)
 
 app.get('/', (c) => c.text('API Tobimanga'))
 

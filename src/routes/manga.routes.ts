@@ -1,6 +1,7 @@
-import { Context, Hono } from "hono";
-import { Bindings } from "hono/types";
-import { createManga, getAllMangas, getMangaById } from "../controllers/manga.controller";
+import { Context, Hono } from 'hono';
+import { Bindings } from 'hono/types';
+import { createManga, getAllMangas, getMangaById } from '../controllers/manga.controller';
+import { authMiddleware } from '../middlewares/auth.middleware';
 
 const mangas = new Hono<{ Bindings: Bindings }>()
 
